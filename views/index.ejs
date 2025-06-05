@@ -4,16 +4,26 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title><%= pageTitle %></title>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
   <style>
     body { font-family: Arial, sans-serif; margin: 20px; }
     button, input, select { padding: 8px; margin: 5px; }
     .search-section { margin: 20px 0; padding: 15px; background: #f5f5f5; }
+    .date-search { margin-top: 15px; }
+    .top-articles-btn { margin-top: 20px; }
+    .date-inputs { display: flex; gap: 10px; margin: 10px 0; }
+    .date-inputs input { padding: 8px; }
   </style>
 </head>
 <body>
   <h1><%= pageTitle %></h1>
 
   <button onclick="window.location.href='/articles'">Список статей</button>
+  <% if (showTopArticles) { %>
+    <button class="top-articles-btn" onclick="window.location.href='/articles/top'">
+      <i class="fas fa-star"></i> Топ статей
+    </button>
+  <% } %>
 
   <div class="search-section">
     <h2>Поиск статей</h2>
@@ -29,6 +39,25 @@
       </select>
       <button onclick="searchByAuthor()">Поиск по автору</button>
     </div>
+
+    <% if (showDateSearch) { %>
+      <div class="date-search">
+        <h3>Поиск по дате</h3>
+        <form action="/articles/search/date" method="POST">
+          <div class="date-inputs">
+            <div>
+              <label for="startDate">Дата начала:</label>
+              <input type="date" id="startDate" name="startDate" required>
+            </div>
+            <div>
+              <label for="endDate">Дата окончания:</label>
+              <input type="date" id="endDate" name="endDate" required>
+            </div>
+          </div>
+          <button type="submit"><i class="fas fa-search"></i> Поиск по дате</button>
+        </form>
+      </div>
+    <% } %>
   </div>
 
   <script>
@@ -43,6 +72,14 @@
         option.textContent = author;
         select.appendChild(option);
       });
+
+      // Установка дат по умолчанию (последний месяц)
+      const today = new Date();
+      const oneMonthAgo = new Date();
+      oneMonthAgo.setMonth(today.getMonth() - 1);
+
+      document.getElementById('startDate').valueAsDate = oneMonthAgo;
+      document.getElementById('endDate').valueAsDate = today;
     };
 
     function searchByTitle() {

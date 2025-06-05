@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title><%= pageTitle %></title>
+  <style>
+    body { font-family: Arial, sans-serif; margin: 20px; }
+    .article-detail { border: 1px solid #ddd; padding: 20px; margin-bottom: 20px; }
+    .article-meta { color: #666; margin-bottom: 15px; }
+    .article-content { margin: 20px 0; line-height: 1.6; }
+    .reviews { margin-top: 30px; }
+    .review { border-top: 1px solid #eee; padding: 15px 0; }
+    .back-link { display: block; margin: 20px 0; }
+  </style>
+</head>
+<body>
+  <h1><%= article.title %></h1>
+
+  <a href="/articles" class="back-link">← Назад к списку статей</a>
+
+  <div class="article-detail">
+    <div class="article-meta">
+      <strong>Авторы:</strong> <%= article.authors.join(', ') %><br>
+      <strong>Дата публикации:</strong> <%= article.publishDate.toLocaleDateString() %><br>
+      <strong>Теги:</strong> <%= article.tags.join(', ') %>
+    </div>
+
+    <div class="article-content">
+      <%= article.content %>
+    </div>
+
+    <% if (article.reviews.length > 0) { %>
+      <div class="reviews">
+        <h3>Рецензии (<%= article.reviews.length %>)</h3>
+        <% article.reviews.forEach(review => { %>
+          <div class="review">
+            <strong><%= review.name %></strong> (Оценка: <%= review.rating %>/10)<br>
+            <%= review.text %><br>
+            <small><%= review.createdAt.toLocaleDateString() %></small>
+          </div>
+        <% }); %>
+      </div>
+    <% } else { %>
+      <p>Пока нет рецензий на эту статью.</p>
+    <% } %>
+  </div>
+</body>
+</html>

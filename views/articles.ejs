@@ -4,13 +4,17 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title><%= pageTitle %></title>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
   <style>
     body { font-family: Arial, sans-serif; margin: 20px; }
     button { padding: 8px; margin: 5px; }
-    .article { border: 1px solid #ddd; padding: 15px; margin-bottom: 15px; }
+    .article { border: 1px solid #ddd; padding: 15px; margin-bottom: 15px; position: relative; }
     .article h3 { margin-top: 0; }
     .article-meta { color: #666; font-size: 0.9em; }
     .back-link { display: block; margin: 20px 0; }
+    .article-actions { position: absolute; top: 15px; right: 15px; }
+    .article-actions a { margin-left: 10px; color: #333; text-decoration: none; }
+    .article-actions a:hover { color: #0066cc; }
   </style>
 </head>
 <body>
@@ -23,6 +27,11 @@
   <% } else { %>
     <% articles.forEach((article, index) => { %>
       <div class="article">
+        <div class="article-actions">
+          <a href="/articles/<%= article._id %>" title="Просмотр статьи"><i class="fas fa-eye"></i></a>
+          <a href="/articles/<%= article._id %>/delete" title="Удалить статью" onclick="return confirm('Вы уверены, что хотите удалить эту статью?')"><i class="fas fa-trash"></i></a>
+          <a href="/articles/new" title="Создать статью"><i class="fas fa-plus"></i></a>
+        </div>
         <h3><%= index + 1 %>. <%= article.title %></h3>
         <div class="article-meta">
           Авторы: <%= article.authors.join(', ') %> |
@@ -42,4 +51,4 @@
     <% }); %>
   <% } %>
 </body>
-</html>a
+</html>

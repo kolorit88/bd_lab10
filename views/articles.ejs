@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title><%= pageTitle %></title>
+  <style>
+    body { font-family: Arial, sans-serif; margin: 20px; }
+    button { padding: 8px; margin: 5px; }
+    .article { border: 1px solid #ddd; padding: 15px; margin-bottom: 15px; }
+    .article h3 { margin-top: 0; }
+    .article-meta { color: #666; font-size: 0.9em; }
+    .back-link { display: block; margin: 20px 0; }
+  </style>
+</head>
+<body>
+  <h1><%= pageTitle %></h1>
+
+  <a href="/" class="back-link">← На главную</a>
+
+  <% if (articles.length === 0) { %>
+    <p>Статьи не найдены</p>
+  <% } else { %>
+    <% articles.forEach((article, index) => { %>
+      <div class="article">
+        <h3><%= index + 1 %>. <%= article.title %></h3>
+        <div class="article-meta">
+          Авторы: <%= article.authors.join(', ') %> |
+          Дата публикации: <%= article.publishDate.toLocaleDateString() %>
+        </div>
+        <div>
+          Теги: <%= article.tags.join(', ') %>
+        </div>
+        <% if (article.reviews.length > 0) { %>
+          <div>
+            Средняя оценка:
+            <%= (article.reviews.reduce((sum, review) => sum + review.rating, 0) / article.reviews.length).toFixed(1) %>
+            (на основе <%= article.reviews.length %> рецензий)
+          </div>
+        <% } %>
+      </div>
+    <% }); %>
+  <% } %>
+</body>
+</html>a

@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title><%= pageTitle %></title>
+  <style>
+    body { font-family: Arial, sans-serif; margin: 20px; }
+    button, input, select { padding: 8px; margin: 5px; }
+    .search-section { margin: 20px 0; padding: 15px; background: #f5f5f5; }
+  </style>
+</head>
+<body>
+  <h1><%= pageTitle %></h1>
+
+  <button onclick="window.location.href='/articles'">Список статей</button>
+
+  <div class="search-section">
+    <h2>Поиск статей</h2>
+
+    <div>
+      <input type="text" id="searchText" placeholder="Введите название статьи">
+      <button onclick="searchByTitle()">Поиск по названию</button>
+    </div>
+
+    <div>
+      <select id="authorSelect">
+        <option value="">-- Выберите автора --</option>
+      </select>
+      <button onclick="searchByAuthor()">Поиск по автору</button>
+    </div>
+  </div>
+
+  <script>
+    window.onload = async function() {
+      const response = await fetch('/authors');
+      const authors = await response.json();
+
+      const select = document.getElementById('authorSelect');
+      authors.forEach(author => {
+        const option = document.createElement('option');
+        option.value = author;
+        option.textContent = author;
+        select.appendChild(option);
+      });
+    };
+
+    function searchByTitle() {
+      const searchText = document.getElementById('searchText').value.trim();
+      if (searchText) {
+        const form = document.createElement('form');
+        form.method = 'POST';
+        form.action = '/articles/search/title';
+
+        const input = document.createElement('input');
+        input.type = 'hidden';
+        input.name = 'searchText';
+        input.value = searchText;
+
+        form.appendChild(input);
+        document.body.appendChild(form);
+        form.submit();
+      }
+    }
+
+    function searchByAuthor() {
+      const author = document.getElementById('authorSelect').value;
+      if (author) {
+        const form = document.createElement('form');
+        form.method = 'POST';
+        form.action = '/articles/search/author';
+
+        const input = document.createElement('input');
+        input.type = 'hidden';
+        input.name = 'author';
+        input.value = author;
+
+        form.appendChild(input);
+        document.body.appendChild(form);
+        form.submit();
+      }
+    }
+  </script>
+</body>
+</html>
